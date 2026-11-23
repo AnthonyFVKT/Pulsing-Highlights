@@ -1,0 +1,60 @@
+<idea-plugin>
+    <id>dev.anton.pulsing</id>
+    <name>Pulsing Highlights</name>
+    <version>0.2.1</version>
+    <vendor url="https://github.com/AnthonyFVKT">Anton Shubin</vendor>
+
+    <idea-version since-build="241"/>
+
+    <description><![CDATA[
+        Animated highlighting for problems: instead of a static underline, the
+        problematic line slowly "breathes" with a translucent background, and a
+        newly appeared problem flashes a few times before settling into the pulse.
+        <br/><br/>
+        Different colors per severity: errors are red, warnings are yellow, weak
+        warnings are dark yellow. An optional colored frame around the editor shows
+        the worst problem in the current file.
+        <br/><br/>
+        <b>Error (red)</b><br/>
+        <img src="https://raw.githubusercontent.com/AnthonyFVKT/Pulsing-Highlights/main/docs/error.gif"
+             alt="Error pulse" width="720"/>
+        <br/><br/>
+        <b>Warning (yellow)</b><br/>
+        <img src="https://raw.githubusercontent.com/AnthonyFVKT/Pulsing-Highlights/main/docs/warning.gif"
+             alt="Warning pulse" width="720"/>
+        <br/><br/>
+        Configure colors, opacity, period, warnings and the frame in
+        <b>Settings | Editor | Pulsing Highlights</b>.
+        <br/><br/>
+        Works in any IntelliJ-based IDE (GoLand, IDEA, WebStorm, ...); the plugin only
+        uses editor APIs and does not depend on a specific language plugin.
+    ]]></description>
+
+    <change-notes><![CDATA[
+        Version 0.2.1
+        <ul>
+            <li>Fixed irregular flicker during the first second: the initial flash and the breathing pulse are now sequential phases and no longer overlap.</li>
+        </ul>
+        Version 0.2.0
+        <ul>
+            <li>Initial release.</li>
+            <li>Animated pulse for errors, warnings and weak warnings (separate colors).</li>
+            <li>Optional colored frame around the editor, based on the worst problem in the file.</li>
+            <li>Configurable colors, opacity, pulse period and flash-on-new-problem.</li>
+        </ul>
+    ]]></change-notes>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceImplementation="dev.anton.pulsing.PulsingSettings"/>
+        <applicationService serviceImplementation="dev.anton.pulsing.PulsingService"/>
+
+        <applicationConfigurable id="dev.anton.pulsing.settings"
+                                 instance="dev.anton.pulsing.PulsingConfigurable"
+                                 displayName="Pulsing Highlights"
+                                 parentId="editor"/>
+
+        <editorFactoryListener implementation="dev.anton.pulsing.PulsingInstaller"/>
+    </extensions>
+</idea-plugin>
